@@ -1,0 +1,37 @@
+<form  method="post" enctype="multipart/form-data">
+
+    <label class="input-group-prepend" for="image_name">
+      <i class="fa fa-camera" data-toggle="tooltip" title="Attach a photo or video"></i> 
+  
+  <script>
+    function getFile(filePath) {
+      return filePath.substr(filePath.lastIndexOf('\\') + 1).split('.')[0];    
+  }
+  
+  var ext;
+  
+  function getoutput() {
+    outputfile.value = getFile(image_name.value);
+    ext = extension.value = image_name.value.split('.')[1];
+    console.log(ext);
+  }
+  
+  getoutput();
+  console.log(ext);   
+  
+  if (ext == 'jpg') {
+    document.write('<img class="image_Preview">');
+    document.write('<h1>It worked for jpg!</h1>');
+  
+  } else if (ext == 'mp4') {
+    document.write('<video class="image_Preview"></video>');
+    document.write('<h1>It worked for mp4!</h1>');
+  }
+  </script>
+  
+    </label>
+    <input id="image_name" name="image_name" class="file" type="file" data-count="0" style="display: none;"  onChange='getoutput()'> <br>
+        Output Filename <input id='outputfile' type='file' name='outputfile'><br>
+        Extension <input id='extension' type='file' name='extension'>
+  
+  </form>
