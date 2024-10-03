@@ -1,0 +1,99 @@
+ <main>
+
+  <h1>Heart.</h1>
+
+  <svg viewBox="0 0 24 24">
+    <use xlink:href="#heart" /> <!-- filled heart -->
+    <use xlink:href="#heart" /> <!-- outline heart -->
+  </svg>
+
+  <!-- reference path for both outline, and filled, hearts -->
+  <svg class="hide" viewBox="0 0 24 24">
+    <defs>
+      <path id="heart" d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z" />
+    </defs>
+  </svg>
+
+  <p>Playing around with <code>&lt;svg /&gt;</code> and <code>&lt;def /&gt;</code> to create a nice animated heart icon without multiple elements, or svgs.</p>
+
+</main>
+
+<style>
+:root {
+  --heart: #f43965;
+}
+
+svg use {
+  fill: transparent;
+  stroke: rgba(255, 255, 255, 0.7);
+  stroke-width: 1.2;
+  transition: all 0.33s ease;
+}
+
+svg use:last-child {
+  fill: var(--heart);
+  stroke: var(--heart);
+  opacity: 0;
+  transform: scale(0.33);
+  transform-origin: center;
+}
+
+.on svg use {
+  stroke: transparent;
+}
+
+.on svg use:last-child {
+  opacity: 1;
+  transform: none;
+  transition: all 0.5s cubic-bezier(0.19, 2.41, 0.45, 0.94);
+}
+
+svg {
+  width: max(30px, 3vw);
+  height: max(30px, 3vw);
+  overflow: visible !important;
+}
+
+html,
+body {
+  color: white;
+  background: #333844;
+  padding: 0;
+  font-family: "Assistant", sans-serif;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  text-align: center;
+}
+
+h1 {
+  font-weight: 100;
+  font-size: max(30px, 3vw);
+}
+
+p {
+  max-width: 60ch;
+}
+
+h1,
+p {
+  margin: max(30px, 2vw);
+}
+
+.hide {
+  display: none;
+}
+
+</style>
+
+<script>
+$("html").on("click", function () {
+  $(this).toggleClass("on");
+});
+setTimeout(function () {
+  $("html").addClass("on");
+}, 1000);
+</script>

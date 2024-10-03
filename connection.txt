@@ -1,0 +1,48 @@
+<?php
+include 'config.php';
+?>
+<?php
+// Check if the form is submitted
+if (isset($_POST['submit'])) {
+    // Retrieve form data
+    $name = $_POST['name'];
+    $filenames = $_FILES['img']['name'];
+    $tmp_names = $_FILES['img']['tmp_name'];
+    $folder = [];
+    $flagUnsupportedFormat = false; // Flag to track unsupported formats
+    // Loop through each file and move it to the respective folder
+    foreach ($filenames as $key => $filename) {
+        $tmp_name = $tmp_names[$key];
+        $folder[] = "uploads/" . $filename;
+        // Check if the file is an image
+        $check = getimagesize($tmp_name);
+        if ($check === false) {
+            echo "File '$filename' is not an image.<br>";
+            continue; // Skip this file and move to the next
+        }
+        // Check file format
+        $allowedFormats = ["jpg", "jpeg", "png", "gif","webp"];
+        $imageFileType = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        if (!in_array($imageFileType, $allowedFormats)) {
+            echo "File '$filename' has an unsupported format. Only JPG, JPEG, PNG, and GIF files are allowed.<br>";
+            $flagUnsupportedFormat = true; // Set the flag
+            continue; // Skip this file and move to the next
+        }
+        // Check file size (optional, set your desired size)
+        $maxFileSize = 5 * 1024 * 1024; // 5MB
+        if ($_FILES['img']['size'][$key] > $maxFileSize) {
+            echo "File '$filename' is too large. Maximum size allowed is 5MB.<br>";
+            continue; // Skip this file and move to the next
+        }
+        move_uploaded_file($tmp_name, $folder[$key]);
+    }
+    if (!$flagUnsupportedFormat) {
+        // Insert data only if no unsupported formats were encountered
+        $sql = "INSERT INTO images (img, name)
+                VALUES ('" . implode(",", $folder) . "', '$name')";
+        if ($conn->query($sql) !== TRUE) {
+            echo "Error inserting record: " . $conn->error;
+        }
+    }
+}
+?>

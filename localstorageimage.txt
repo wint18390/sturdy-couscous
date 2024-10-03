@@ -1,0 +1,59 @@
+
+
+localStorage.setItem("dropped_images", JSON.stringify( array_dropped_images ) );
+
+/////////////////////////
+
+localStorage.getItem('dropped_images'):
+[
+{"id":0,"data":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACgAAAAWgCAIAAAAdYo2IAAAAGXRFW…nu8vxl30QxDphgBbok9vXa1iT2dWMDBGQHDCyNMfCUO83/A/VzaPVq31uqAAAAAElFTkSuQmCC"},
+{"id":1,"data":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAACgAAAAWgCAIAAAAdYo2IAAAAGXRFW…m4r4R9wH1l7K6H+6pa8cB9IzySnR2RydqmlhaTBqfp8hP/HzkuuKqP/f8rAAAAAElFTkSuQmCC"}
+]
+
+
+///////////////////////
+function base64_to_img($base64_string, $output_file) {
+    $data = explode(',', $base64_string);
+
+    /**
+     * Remove the raw text
+     */
+    $ext = str_replace("data:image/", '', $data[0]);
+    $ext = str_replace(";base64", '', $ext);
+
+    /**
+     * Create the file with the correct extension
+     */
+    $ifp = fopen($output_file . "." . $ext, "wb"); 
+
+    /**
+     * Create file based on base64
+     */
+    fwrite($ifp, base64_decode($data[1])); 
+    fclose($ifp); 
+
+    /**
+     * return file path
+     */
+    return $output_file; 
+}
+///////////////////////
+
+$img = $_POST['img_data'];
+
+$file = base64_to_img($img, '/path/to/file.png');
+
+function base64_to_img($base64_string, $output_file) {
+    $ifp = fopen($output_file, "wb"); 
+
+    $data = explode(',', $base64_string);
+
+    fwrite($ifp, base64_decode($data[1])); 
+    fclose($ifp); 
+
+    return $output_file; 
+}
+
+
+
+https://stackoverflow.com/questions/27911678/uploading-an-image-from-localstorage-to-php
